@@ -68,6 +68,9 @@ pipeline {
 		//打印环境变量信息
                 stage('print global env') {
                     steps {
+			 script{
+                               mytools.PrintMes("环境变量",'blue')
+			 }			     
 			 echo "${env.jdk6}"
 			 echo "${env.jdk7}"
                          echo "${env.jdk8}"

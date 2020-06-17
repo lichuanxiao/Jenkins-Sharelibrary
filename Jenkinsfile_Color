@@ -36,7 +36,7 @@ pipeline {
     }
 	
     stages {
-				//测试
+		//测试
                 stage('Meet Hayden') {
                     input {
                         message "Should we continue?"
@@ -48,6 +48,7 @@ pipeline {
                     }
                     steps {
                          echo "Hello, ${Person}, nice to meet you."
+                         mytools.PrintMes("测试input",'blue')
                     }
                 }       
         
@@ -56,14 +57,13 @@ pipeline {
                     steps{
                         timeout(time:30, unit:"MINUTES"){
                             script{
-                                print("代码扫描")
-                                mytools.PrintMes("代码扫描",'green1')
+                                mytools.PrintMes("代码扫描",'blue')
                             }
                         }
                     }
                 }
 				
-				//打印环境变量信息
+		//打印环境变量信息
                 stage('print global env') {
                     steps {
 			 echo "${env.jdk6}"

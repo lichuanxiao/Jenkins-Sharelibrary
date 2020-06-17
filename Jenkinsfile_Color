@@ -33,6 +33,8 @@ pipeline {
 	jdk8 = tool 'jdk1.8.0_144'	
 	jdk9 = tool 'jdk-9.0.4'		
         mvn354 = tool 'maven3.5.4'
+	gradle53 = tool 'gradle-5.3'
+	ant19 = tool 'ant-1.9.15'
     }
 	
     stages {
@@ -76,6 +78,8 @@ pipeline {
                          echo "${env.jdk8}"
                          echo "${env.jdk9}"
                          echo "${env.mvn354}"
+                         echo "${env.gradle53}"
+                         echo "${env.ant19}"			    
                          sh "${mvn354}/bin/mvn --version"
                          sh "${jdk9}/bin/java --version"
                     }

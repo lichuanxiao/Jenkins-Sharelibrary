@@ -1,0 +1,114 @@
+#!groovy
+
+@Library('jenkinslib') _
+
+def mytools = new org.devops.tools()
+
+
+
+String workspace = "/home/jenkins/.jenkins/workspace"
+
+//Pipeline
+pipeline {
+    agent { node {  label "master"   //指定运行节点的标签或者名称
+                    customWorkspace "${workspace}"   //指定运行工作目录（可选）
+            }
+    }
+
+    options {
+        timestamps()  //日志会有时间
+        skipDefaultCheckout()  //删除隐式checkout scm语句
+        disableConcurrentBuilds() //禁止并行
+        timeout(time: 1, unit: 'HOURS')  //流水线超时设置1h
+    }
+
+    parameters {
+    //微信通知
+    string(name:'WEICHAT_RECEIVERS',defaultValue: 'GuoHaiLiang',description: '微信接收消息,多人接收xxx|xxxx')   
+    }
+	
+    environment {
+	jdk6 = tool 'jdk1.6.0_45'
+	jdk7 = tool 'jdk1.7.0_80'	
+	jdk8 = tool 'jdk1.8.0_144'	
+	jdk9 = tool 'jdk-9.0.4'		
+        mvn354 = tool 'maven3.5.4'
+    }
+	
+    stages {
+				//测试
+                stage('Meet Hayden') {
+                    input {
+                        message "Should we continue?"
+                        ok "Yes, we should."
+                        submitter "admin,hayden"
+                        parameters {
+                            string(name: 'Person', defaultValue: 'Mr Hayden', description: 'Who should I say hello to?')
+                        }
+                    }
+                    steps {
+                         echo "Hello, ${Person}, nice to meet you."
+                    }
+                }       
+        
+                //代码扫描
+                stage("CodeScan"){
+                    steps{
+                        timeout(time:30, unit:"MINUTES"){
+                            script{
+                                print("代码扫描")
+                                mytools.PrintMes("代码扫描",'green1')
+                            }
+                        }
+                    }
+                }
+				
+				//打印环境变量信息
+                stage('print global env') {
+                    steps {
+			 echo "${env.jdk6}"
+			 echo "${env.jdk7}"
+                         echo "${env.jdk8}"
+                         echo "${env.jdk9}"
+                         echo "${env.mvn354}"
+                         sh "${mvn354}/bin/mvn --version"
+                         sh "${jdk9}/bin/java --version"
+                    }
+                }
+    }
+    //构建后操作
+   post {
+       success {
+          script{
+           wrap([$class: 'BuildUser']) {
+		    echo  "server:${params.server}"
+            // 执行python脚本，发送编译结果给企业微信
+
+            sh "cd /home/jenkins/weixin/;python weixin.py  \'${WEICHAT_RECEIVERS}\' 'Jenkins 构建结果：' '\n①构建项目：${JOB_NAME}；\n②构建次数：${BUILD_NUMBER}；\n③构建状态：Success；\n④持续时间：${currentBuild.duration}ms；\n⑤构建节点：${NODE_NAME}； \n⑥构建者：${BUILD_USER}; \n⑦地址：${BUILD_URL}'" 
+          }
+         }
+       }
+       failure {
+          script{
+           wrap([$class: 'BuildUser']) {
+            // 执行python脚本，发送编译结果给企业微信
+			if(env.deployEnv == 'rollback'){
+			    message='failure,the deploy is rollback'
+			}else{
+			   message='failure'
+			}
+            sh "cd /home/jenkins/weixin/;python weixin.py  \'${WEICHAT_RECEIVERS}\' 'Jenkins 构建结果：' '\n①构建项目：${JOB_NAME}；\n②构建次数：${BUILD_NUMBER}；\n③构建状态：${message}；\n④持续时间：${currentBuild.duration}ms；\n⑤构建节点：${NODE_NAME}； \n⑥构建者：${BUILD_USER}; \n⑦地址：${BUILD_URL}'" 
+          }
+         }
+       }   
+       aborted{
+	      script{
+           wrap([$class: 'BuildUser']) {
+            // 执行python脚本，发送编译结果给企业微信
+            sh "cd /home/jenkins/weixin/;python weixin.py  \'${WEICHAT_RECEIVERS}\' 'Jenkins 构建结果：' '\n①构建项目：${JOB_NAME}；\n②构建次数：${BUILD_NUMBER}；\n③构建状态：Aborted；\n④持续时间：${currentBuild.duration}ms；\n⑤构建节点：${NODE_NAME}； \n⑥构建者：${BUILD_USER}; \n⑦地址：${BUILD_URL}'" 
+          }
+         }
+	   }
+       	   
+   }
+}

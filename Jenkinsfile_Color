@@ -48,7 +48,9 @@ pipeline {
                     }
                     steps {
                          echo "Hello, ${Person}, nice to meet you."
-                         mytools.PrintMes("测试input",'blue')
+			    script{
+                                   mytools.PrintMes("测试input语法",'blue')
+			    }
                     }
                 }       
         

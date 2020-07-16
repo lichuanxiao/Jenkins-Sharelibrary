@@ -10,6 +10,6 @@ def call(String yanzheng = '',String servicename = '',String batchDeployServer =
             }               
             stage(servicename+'健康检查'){
                  checkService_common(yanzheng,batchDeployServer,timeSize)
-            }	  			    
+            }
     }
 }

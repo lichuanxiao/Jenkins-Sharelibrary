@@ -1,13 +1,13 @@
-def  call(String servicename='',String serviceNameBatchDeployServer='',String patternName='',String warName='',String download_path=''){ 
-	if(serviceNameBatchDeployServer.length() != 0 ){
+def  call(String servicename='',String BatchDeployServer='',String warName=''){ 
+	if(BatchDeployServer.length() != 0 ){
         //从制品库下载包
         sh "curl --user '${nexusRawUsernamePassword}'  --o  ${env.WarName}  http://119.3.223.138:8081/repository/raw-devops/devops/${params.nexusRawRepository}"
         //下载脚本
         sh "/usr/bin/git clone git@github.com:ghl1024/Jenkinsfile.git"	                         
         def serverlist=serviceNameBatchDeployServer.split('\\|')
         for(values in serverlist){
-            //values=serverlist[0]
-            list1=values.split(',') 
+			//values=serverlist[0]
+			list1=values.split(',') 
             print(list1[0]+" "+list1[1]+" "+list1[2])						  
             listServerIP=list1[0]
             listServerPort=list1[1]

@@ -1,4 +1,4 @@
-def  call(String servicename='',String batchDeployServer='',String warName=''){ 
+def  call(String servicename='',String BatchDeployServer='',String WarName=''){ 
 	if(BatchDeployServer.length() != 0 ){
         //从制品库下载包
         echo "从制品库下载包"

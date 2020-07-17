@@ -1,7 +1,8 @@
-def  call(String servicename='',String BatchDeployServer='',String WarName=''){ 
+def  call(String servicename='',String batchDeployServer='',String warName=''){ 
 	if(BatchDeployServer.length() != 0 ){
         //从制品库下载包
-        sh "curl --user '${nexusRawUsernamePassword}'  --o  ${WarName}  http://119.3.223.138:8081/repository/raw-devops/devops/${params.nexusRawRepository}"
+        echo "从制品库下载包"
+        sh "curl --user '${nexusRawUsernamePassword}'  --o  ${warName}  http://119.3.223.138:8081/repository/raw-devops/devops/${params.nexusRawRepository}"
         //下载脚本
         sh "/usr/bin/git clone git@github.com:ghl1024/Jenkinsfile.git"	                         
         def serverlist=BatchDeployServer.split('\\|')

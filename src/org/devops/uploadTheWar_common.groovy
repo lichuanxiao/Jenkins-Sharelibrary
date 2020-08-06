@@ -5,10 +5,10 @@ def  call(String warName='',String targetName=''){
                     credentialsId: "artifactory-admin",
                 )
                rtUpload(
-				   serverId: "ARTIFACTORY_SERVER",
-				   spec:"""{"files":[{"pattern":"${warName}","target":"${targetName}"}]}"""
+			serverId: "ARTIFACTORY_SERVER",
+			spec:"""{"files":[{"pattern":"${warName}","target":"${targetName}"}]}"""
 				)
-				rtPublishBuildInfo (
+rtPublishBuildInfo (
                     serverId: "ARTIFACTORY_SERVER"
                 )			
                archiveArtifacts artifacts: "${warName}", fingerprint: true					

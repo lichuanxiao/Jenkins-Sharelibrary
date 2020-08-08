@@ -1,3 +1,5 @@
+echo "test"
+/**
 def call(String warName='',String targetName=''){ 
     rtServer (
         id: "ARTIFACTORY_SERVER",
@@ -13,3 +15,4 @@ def call(String warName='',String targetName=''){
     )			
     archiveArtifacts artifacts: "${warName}", fingerprint: true					
  }
+**/

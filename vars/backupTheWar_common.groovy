@@ -8,7 +8,7 @@ def call(String yanzheng='',String servicename='',String batchDeployServer='',St
             listServerIP=list1[0]
             listServerPort=list1[1]
             listServerUser=list1[2]
-            sh "ansible  ${listServerIP}  -u ${listServerUser} -m copy -a 'src=${WORKSPACE}/devops/JenkinsCICD/jenkins dest=/home/${listServerUser} mode=0755'"
+            sh "ansible  ${listServerIP}  -u ${listServerUser} -m copy -a 'src=${workspace}/${env.servicename}/JenkinsCICD/jenkins dest=/home/${listServerUser} mode=0755'"
             sh "ansible  ${listServerIP}  -u ${listServerUser} -m shell -a  'sh ${bsn}'"
         }
         return " ${batchDeployServer} backup is comeplete"	        

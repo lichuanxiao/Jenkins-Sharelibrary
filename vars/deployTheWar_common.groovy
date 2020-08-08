@@ -9,7 +9,6 @@ def call(String yanzheng='',String servicename='',String batchDeployServer='',St
             listServerPort=list1[1]
             listServerUser=list1[2]
             sh "ansible  ${listServerIP}  -u ${listServerUser} -m  shell -a  'source ~/.bash_profile ; mv /tmp/${servicename}/${WarName} ${warPath} ; nohup sh ${bsn}'"
-            sh "ansible  ${listServerIP}  -u ${listServerUser} -m copy -a 'src=${WORKSPACE}/${env.servicename}/jenkins dest=/home/${listServerUser} mode=0755'"
         }		
         return " ${batchDeployServer} deploy is comeplete"	        
 }

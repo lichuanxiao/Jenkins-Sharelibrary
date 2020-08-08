@@ -8,10 +8,10 @@ def call(String yanzheng = '',String servicename = '',String batchDeployServer =
         }
         stage(servicename+'发布'){			
             deployTheWar_common(yanzheng,servicename,batchDeployServer,DeployShellName,warPath,WarName)
-    	sleep 10		
+            sleep 10		
         }               
         stage(servicename+'健康检查'){
-    	checkService_common(yanzheng,batchDeployServer,timeSize)
-        }	  			      
+            checkService_common(yanzheng,batchDeployServer,timeSize)
+        }
     }
 }
